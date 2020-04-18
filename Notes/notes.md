@@ -57,7 +57,7 @@ So far, these are the key pieces:
 * Dynamic Lighting. Never done it. This might suck.
 * Player.
     * ~~Move. (ARROW KEYS)~~
-    * Swing. (Z)
+    * ~~Swing. (Z)~~
     * Open chests. (X)
     * ~~Refuel torch. (Button 3) (I thought this might bring some depth but it might just be annoying. Consider removing.)~~
     * Pick/Drop kindling. (X)

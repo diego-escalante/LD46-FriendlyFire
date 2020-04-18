@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TopDownMovement : MonoBehaviour {
     
@@ -39,7 +37,11 @@ public class TopDownMovement : MonoBehaviour {
         }
 
         // Actually move the object.
-        transform.Translate(checkedTranslationVector);
+        transform.Translate(checkedTranslationVector, Space.World);
+    }
+
+    public Vector2 getVelocity() {
+        return velocity;
     }
 
     private void move() {
