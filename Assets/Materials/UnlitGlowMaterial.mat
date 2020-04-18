@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Player
+  m_Name: UnlitGlowMaterial
   m_Shader: {fileID: -6465566751694194690, guid: 4c9f44287a34e2d4b8c014d44787ef49,
     type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
@@ -30,4 +30,4 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats: []
     m_Colors:
-    - Color_4B475C4D: {r: 2.1185474, g: 0.36603177, b: 0, a: 0}
+    - Color_4B475C4D: {r: 2, g: 0.3294118, b: 0, a: 0}
