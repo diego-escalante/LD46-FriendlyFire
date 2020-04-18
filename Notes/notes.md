@@ -54,12 +54,11 @@ Gameplay:
 
 So far, these are the key pieces:
 
-* Dynamic Lighting. Never done it. This might suck.
+* ~~Dynamic Lighting. Never done it. This might suck.~~
 * Player.
     * ~~Move. (ARROW KEYS)~~
     * ~~Swing. (Z)~~
-    * Open chests. (X)
-    * ~~Refuel torch. (Button 3) (I thought this might bring some depth but it might just be annoying. Consider removing.)~~
+    * ~~Open chests. (X)~~
     * Pick/Drop kindling. (X)
         * The X button is contextual. If near chest, open. If near kindling, pick up. Otherwise, drop kindling.
 * Enemies.

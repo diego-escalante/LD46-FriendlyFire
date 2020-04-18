@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour {
 
@@ -8,13 +7,21 @@ public class PlayerManager : MonoBehaviour {
     public GameObject FireSwooshPrefab;
     public float attackCooldown = 0.25f;
     public float searchRadius = 1f;
+    public float maxFuelSeconds = 60f;
+    public Slider fuelSlider;
+    public Text kindlingText;
+    public Text goldText;
     
+    private int gold = 0;
+    private int kindling = 0;
+    private float fuelLeftSeconds;
     private float currentCooldownTime = 0;
     private TopDownMovement movementScript;
     private Animator animator;
     private PlayerInputs playerInputs;
 
     public void Start() {
+        fuelLeftSeconds = maxFuelSeconds;
         animator = GetComponent<Animator>();
         movementScript = GetComponent<TopDownMovement>();
         playerInputs = GetComponent<PlayerInputs>();
@@ -24,6 +31,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     public void Update() {
+        updateFuel();
         updateFacingDirection();
         attack();
         action();
@@ -55,6 +63,16 @@ public class PlayerManager : MonoBehaviour {
             
             // Otherwise, if have kindling, drop it.
         }
+    }
+
+    private void updateFuel() {
+        if (fuelLeftSeconds > 0) {
+            fuelLeftSeconds -= Time.deltaTime;
+            fuelSlider.value = Mathf.Clamp(fuelLeftSeconds/maxFuelSeconds, 0, 1);
+            if (fuelLeftSeconds <= 0) {
+                animator.SetTrigger("Unlit");
+            }
+        }        
     }
 
     private ChestBehavior findNearbyClosedChest() {
