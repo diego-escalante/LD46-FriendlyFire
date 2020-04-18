@@ -10,8 +10,10 @@ public class PlayerManager : MonoBehaviour {
     
     private float currentCooldownTime = 0;
     private TopDownMovement movementScript;
+    private Animator animator;
 
     public void Start() {
+        animator = GetComponent<Animator>();
         movementScript = GetComponent<TopDownMovement>();
         if (FireSwooshPrefab == null) {
             Debug.LogError("FireSwooshPrefab has not been picked in the PlayerManager!");
@@ -21,23 +23,18 @@ public class PlayerManager : MonoBehaviour {
     public void Update() {
         updateFacingDirection();
         attack();
+        controlAnimation();
     }
 
     private void attack() {
-        // If we are on cooldown, don't do anything but check if we get off of it.
+        // If not on cooldown and the player attacks, make a swoosh, stop moving.
         if (currentCooldownTime > 0) {
             currentCooldownTime -= Time.deltaTime;
-            if (currentCooldownTime <= 0) {
-                movementScript.enabled = true;
-            }
-            return;
-        }
-
-        // If not on cooldown and the player attacks, make a swoosh, stop moving.
-        if (Input.GetButtonDown("Fire")) {
+        } else if (Input.GetButtonDown("Fire")) {
             Instantiate(FireSwooshPrefab, transform.position + (1.5f * transform.right), facingDirectionToQuaternion(facingDirection));
-            movementScript.enabled = false;
+            // movementScript.enabled = false;
             currentCooldownTime = attackCooldown;
+            animator.SetTrigger("Attack");
         }
     }
 
@@ -52,10 +49,6 @@ public class PlayerManager : MonoBehaviour {
             } else {
                 facingDirection = Vector2.right * Mathf.Sign(velocity.x);
             }
-            
-            // Currently just rotate the sprite into the 4 cardinal directions by changing its Right direction.
-            // If the actual sprites are not 100% top down (aka, need more than one drawing), this will need to be smarter.
-            transform.right = facingDirection;
         }
     }
 
@@ -73,5 +66,11 @@ public class PlayerManager : MonoBehaviour {
             Debug.LogError("Facing Direction is NOT up down left or right, and cannot accurately convert to quaternion.");
             return Quaternion.Euler(0, 0, 0);
         }
+    }
+
+    private void controlAnimation() {
+        Vector2 velocity = movementScript.getVelocity();
+        animator.SetInteger("Horizontal", velocity.x == 0 ? 0 : (int)Mathf.Sign(velocity.x));
+        animator.SetInteger("Vertical", velocity.y == 0 ? 0 : (int)Mathf.Sign(velocity.y));
     }
 }
