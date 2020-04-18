@@ -1,4 +1,4 @@
-# LD46
+# LD46: Keep It Alive
 
 ### [Play LD46 here!](http://diego-escalante.github.io/LD46/)
 
