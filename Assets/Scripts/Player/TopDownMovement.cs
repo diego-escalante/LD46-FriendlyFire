@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 // For future reuse:
-// TopDownMovement shouldn't take input directly, there should be a input manager controlling everything.
+// TopDownMovement shouldn't take input directly, there should be a input manager controlling everything. (Ok, inputs are a little better now but there's still room to improve.)
 // It would be nice for TopDownMovement to have acceleration, but its not necessary for this game.
 
 public class TopDownMovement : MonoBehaviour {
@@ -11,10 +11,12 @@ public class TopDownMovement : MonoBehaviour {
     // public bool accelerationEnabled = true;
     // public float acceleration = 50f;
 
+    private PlayerInputs playerInputs;
     private Vector2 velocity = Vector2.zero;
     private CollisionChecker collisionChecker;
 
     public void Start() {
+        playerInputs = GetComponent<PlayerInputs>();
         // Make sure this object has a collision checker.
         collisionChecker = GetComponent<CollisionChecker>();
         if (collisionChecker == null) {
@@ -49,7 +51,7 @@ public class TopDownMovement : MonoBehaviour {
     }
 
     private void move() {
-        Vector2 targetVelocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized * moveSpeed;
+        Vector2 targetVelocity = new Vector2(playerInputs.horizontal, playerInputs.vertical).normalized * moveSpeed;
         velocity = targetVelocity;
 
         // There's really no need to spend time with acceleration here for this project.

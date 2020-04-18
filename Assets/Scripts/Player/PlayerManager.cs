@@ -7,14 +7,17 @@ public class PlayerManager : MonoBehaviour {
     public Vector2 facingDirection = Vector2.up;
     public GameObject FireSwooshPrefab;
     public float attackCooldown = 0.25f;
+    public float searchRadius = 1f;
     
     private float currentCooldownTime = 0;
     private TopDownMovement movementScript;
     private Animator animator;
+    private PlayerInputs playerInputs;
 
     public void Start() {
         animator = GetComponent<Animator>();
         movementScript = GetComponent<TopDownMovement>();
+        playerInputs = GetComponent<PlayerInputs>();
         if (FireSwooshPrefab == null) {
             Debug.LogError("FireSwooshPrefab has not been picked in the PlayerManager!");
         }
@@ -23,6 +26,7 @@ public class PlayerManager : MonoBehaviour {
     public void Update() {
         updateFacingDirection();
         attack();
+        action();
         controlAnimation();
     }
 
@@ -30,12 +34,52 @@ public class PlayerManager : MonoBehaviour {
         // If not on cooldown and the player attacks, make a swoosh, stop moving.
         if (currentCooldownTime > 0) {
             currentCooldownTime -= Time.deltaTime;
-        } else if (Input.GetButtonDown("Fire")) {
+        } else if (playerInputs.attacking) {
             Instantiate(FireSwooshPrefab, transform.position + (1.5f * transform.right), facingDirectionToQuaternion(facingDirection));
             // movementScript.enabled = false;
             currentCooldownTime = attackCooldown;
             animator.SetTrigger("Attack");
         }
+    }
+
+    private void action() {
+        if (playerInputs.action) {
+            // If near closed chest, open it.
+            ChestBehavior chestBehavior = findNearbyClosedChest();
+            if (chestBehavior != null) {
+                chestBehavior.Open();
+                return;
+            }
+
+            // Otherwise, if near kindling, pick it up.
+            
+            // Otherwise, if have kindling, drop it.
+        }
+    }
+
+    private ChestBehavior findNearbyClosedChest() {
+        
+        // Find all nearby chests.
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, searchRadius);
+        if (colliders == null || colliders.Length == 0) {
+            return null;
+        }
+
+        // If a chest is closed, return that one.
+        ChestBehavior chestBehavior;
+        foreach (Collider2D coll in colliders) {
+            
+            if (coll.gameObject.tag != "Chest") {
+                // This collider is not a chest, skip.
+                continue;
+            }
+
+            chestBehavior = coll.GetComponent<ChestBehavior>();
+            if (chestBehavior.closed) {
+                return chestBehavior;
+            }
+        }
+        return null;
     }
 
     private void updateFacingDirection() {

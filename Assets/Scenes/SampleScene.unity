@@ -370,6 +370,7 @@ GameObject:
   - component: {fileID: 543660994}
   - component: {fileID: 543660998}
   - component: {fileID: 543660999}
+  - component: {fileID: 543661002}
   - component: {fileID: 543661000}
   - component: {fileID: 543661001}
   m_Layer: 0
@@ -516,6 +517,7 @@ MonoBehaviour:
   FireSwooshPrefab: {fileID: 2067860662407695590, guid: 515054b3df687924b97f166a0b2ea99d,
     type: 3}
   attackCooldown: 0.35
+  searchRadius: 0.5
 --- !u!95 &543661000
 Animator:
   serializedVersion: 3
@@ -548,6 +550,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   updating: 1
+--- !u!114 &543661002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 543660993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee337310e0d969f4cb0e2892cca0e1e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1121221825
 GameObject:
   m_ObjectHideFlags: 0
@@ -785,9 +799,11 @@ GameObject:
   - component: {fileID: 1774887983}
   - component: {fileID: 1774887985}
   - component: {fileID: 1774887986}
+  - component: {fileID: 1774887988}
+  - component: {fileID: 1774887987}
   m_Layer: 8
   m_Name: Chest
-  m_TagString: Untagged
+  m_TagString: Chest
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -896,3 +912,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   updating: 0
+--- !u!95 &1774887987
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774887982}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5a2866d87933c724ca9b3da14741e975, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1774887988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774887982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 230e1392863880d458cd91621282225f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
