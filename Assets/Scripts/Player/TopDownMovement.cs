@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 
+// For future reuse:
+// TopDownMovement shouldn't take input directly, there should be a input manager controlling everything.
+// It would be nice for TopDownMovement to have acceleration, but its not necessary for this game.
+
 public class TopDownMovement : MonoBehaviour {
     
     public float moveSpeed = 5f;
