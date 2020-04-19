@@ -12,6 +12,7 @@ public class ChestBehavior : MonoBehaviour {
     private float currentTime;
     private PlayerInputs playerInputs;
     private PlayerManager playerManager;
+    private SoundController soundController;
 
     void Start() {
         timeToOpen = Random.Range(timeToOpen/2f, timeToOpen);
@@ -24,6 +25,7 @@ public class ChestBehavior : MonoBehaviour {
         }
         playerInputs = player.GetComponent<PlayerInputs>();
         playerManager = player.GetComponent<PlayerManager>();
+        soundController = GameObject.FindGameObjectWithTag("Ladder").GetComponent<SoundController>();
     }
 
     private void Update() {
@@ -42,6 +44,7 @@ public class ChestBehavior : MonoBehaviour {
             if (currentTime <= 0) {
                 //Open!
                 animator.SetTrigger("Open");
+                soundController.playScoreSound();
                 playerManager.addGold();
                 unlockBar.SetActive(false);
                 closed = false;

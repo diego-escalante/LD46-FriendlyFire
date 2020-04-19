@@ -10,6 +10,7 @@ public class BatBehavior : MonoBehaviour {
     private Collider2D playerColl, coll;
     private bool isFleeing = false;
     private float startingSpeed;
+    private SoundController soundController;
 
     void Start() {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -17,6 +18,7 @@ public class BatBehavior : MonoBehaviour {
         playerManager = player.GetComponent<PlayerManager>();
         coll = GetComponent<Collider2D>();
         startingSpeed = speed;
+        soundController = GameObject.FindGameObjectWithTag("Ladder").GetComponent<SoundController>();
     }
 
     void Update() {
@@ -38,6 +40,7 @@ public class BatBehavior : MonoBehaviour {
     public void getBurntYo() {
         if (!isFleeing) {
             isFleeing = true;
+            soundController.playBatLeaveSound();
             GetComponent<Animator>().SetTrigger("Scared");
         }
     }

@@ -31,6 +31,7 @@ public class PlayerManager : MonoBehaviour {
     private PlayerInputs playerInputs;
     private Color startingColor;
     private bool isDead = false;
+    private SoundController soundController;
 
     public void Start() {
         kindlingText.text = kindling.ToString();
@@ -44,6 +45,7 @@ public class PlayerManager : MonoBehaviour {
         startingGIntensity = globalLight.intensity;
         startingColor = new Color(4f, 2f, 0f, 1f);
         material.SetColor("_Color", startingColor);
+        soundController = GameObject.FindGameObjectWithTag("Ladder").GetComponent<SoundController>();
     }
 
     public void Update() {
@@ -73,6 +75,7 @@ public class PlayerManager : MonoBehaviour {
 
     public void die() {
         if (!isDead) {
+            soundController.playHitSound();
             isDead = true;
             Destroy(playerInputs);
             transform.localRotation = Quaternion.Euler(0, 0, 90);
@@ -94,11 +97,17 @@ public class PlayerManager : MonoBehaviour {
     }
 
     private void refuel() {
-        if (playerInputs.refuel && kindling > 0) {
-            kindling--;
-            kindlingText.text = kindling.ToString();
-            fuelLeftSeconds = maxFuelSeconds;
-            fuelSlider.value = Mathf.Clamp(fuelLeftSeconds/maxFuelSeconds, 0, 1);
+        if (playerInputs.refuel) {
+            if (kindling > 0) {
+                soundController.playlightSound();
+                kindling--;
+                kindlingText.text = kindling.ToString();
+                fuelLeftSeconds = maxFuelSeconds;
+                fuelSlider.value = Mathf.Clamp(fuelLeftSeconds/maxFuelSeconds, 0, 1);
+            } else {
+                soundController.playErrorSound();
+            }
+            
         }
     }
 
@@ -110,6 +119,7 @@ public class PlayerManager : MonoBehaviour {
             // movementScript.enabled = false;
             currentCooldownTime = attackCooldown;
             animator.SetTrigger("Attack");
+            soundController.playSwingSound();
 
             // Choose attack point.
             Vector2 attackPoint = getPositionInFrontOfPlayer();
@@ -139,9 +149,11 @@ public class PlayerManager : MonoBehaviour {
                 switch (hit.gameObject.tag) {
                     case "Kindling":
                         if (!isUnlit) {
+                            soundController.playlightSound();
                             hit.GetComponent<KindlingBehavior>().Light();
                         } else {
                             if (hit.GetComponent<KindlingBehavior>().lit && fuelLeftSeconds > 0) {
+                                soundController.playlightSound();
                                 animator.SetTrigger("Lit");
                                 globalLight.intensity = startingGIntensity;
                                 isUnlit = false; 
@@ -160,8 +172,12 @@ public class PlayerManager : MonoBehaviour {
     private void action() {
         if (playerInputs.action) {
             // If near ladder and have enough gold, win.
-            if (gold >= 100 && Vector2.Distance(GameObject.FindGameObjectWithTag("Ladder").transform.position, transform.position) <= searchRadius) {
-                win();
+            if (Vector2.Distance(GameObject.FindGameObjectWithTag("Ladder").transform.position, transform.position) <= searchRadius) {
+                if (gold >= 100) {
+                    win();
+                } else {
+                    soundController.playErrorSound();
+                }
                 return;
             }
 
@@ -181,6 +197,7 @@ public class PlayerManager : MonoBehaviour {
                 //     globalLight.intensity = startingGIntensity;
                 //     material.color = startingColor;
                 // }
+                soundController.playPickupSound();
                 kindling++;
                 kindlingText.text = kindling.ToString();
                 Destroy(kindlingBehavior.gameObject);
@@ -198,11 +215,13 @@ public class PlayerManager : MonoBehaviour {
     private void dropKindling() {
         Vector2 dropPoint = getPositionInFrontOfPlayer() + new Vector2(0,-0.5f * 0.75f); // Kindling is offsetted. gross.
         Collider2D[] colls = Physics2D.OverlapBoxAll(dropPoint, Vector2.one, 0);
-        // TODO: Would be nice to provide feedback when unable to place, like a sound.
         if (colls == null || colls.Length == 0) {
             Instantiate(kindlingPrefab, dropPoint, Quaternion.identity);
             kindling--;
             kindlingText.text = kindling.ToString();
+            soundController.playDropSound();
+        } else {
+            soundController.playErrorSound();
         }
     }
 
