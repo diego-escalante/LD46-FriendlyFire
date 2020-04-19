@@ -432,12 +432,12 @@ PrefabInstance:
     - target: {fileID: 7886839906692509796, guid: d1a9bbf6fcfc1a641941eff3673204d9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.370773
+      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: 7886839906692509796, guid: d1a9bbf6fcfc1a641941eff3673204d9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.542803
+      value: 1.8
       objectReference: {fileID: 0}
     - target: {fileID: 7886839906692509796, guid: d1a9bbf6fcfc1a641941eff3673204d9,
         type: 3}
@@ -919,12 +919,15 @@ MonoBehaviour:
   facingDirection: {x: 0, y: 1}
   attackCooldown: 0.35
   searchRadius: 0.75
-  maxFuelSeconds: 60
+  maxFuelSeconds: 15
   fuelSlider: {fileID: 605541136}
   kindlingText: {fileID: 157969110}
   goldText: {fileID: 333886588}
   kindlingPrefab: {fileID: 7886839906692509794, guid: d1a9bbf6fcfc1a641941eff3673204d9,
     type: 3}
+  torchLightFg: {fileID: 1250004967}
+  torchLightBg: {fileID: 1121221827}
+  material: {fileID: 2100000, guid: f0b21f72e42f72f46ada962aaea03bf4, type: 2}
 --- !u!95 &543661000
 Animator:
   serializedVersion: 3

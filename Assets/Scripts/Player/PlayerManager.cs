@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class PlayerManager : MonoBehaviour {
 
@@ -11,7 +12,13 @@ public class PlayerManager : MonoBehaviour {
     public Text kindlingText;
     public Text goldText;
     public GameObject kindlingPrefab;
+    public Light2D torchLightFg;
+    public Light2D torchLightBg;
+    public Material material;
     
+    private bool isUnlit = false;
+    private float startingFgIntensity, startingBgIntensity;
+    private float minimumMultiplier = 0.1f;
     private int gold = 0;
     private int kindling = 5;
     private float fuelLeftSeconds;
@@ -19,6 +26,7 @@ public class PlayerManager : MonoBehaviour {
     private TopDownMovement movementScript;
     private Animator animator;
     private PlayerInputs playerInputs;
+    private Color startingColor;
 
     public void Start() {
         kindlingText.text = kindling.ToString();
@@ -27,6 +35,10 @@ public class PlayerManager : MonoBehaviour {
         animator = GetComponent<Animator>();
         movementScript = GetComponent<TopDownMovement>();
         playerInputs = GetComponent<PlayerInputs>();
+        startingBgIntensity = torchLightBg.intensity;
+        startingFgIntensity = torchLightFg.intensity;
+        startingColor = new Color(4f, 2f, 0f, 1f);
+        material.SetColor("_Color", startingColor);
     }
 
     public void Update() {
@@ -82,9 +94,15 @@ public class PlayerManager : MonoBehaviour {
             // Otherwise, if near kindling, pick it up.
             KindlingBehavior kindlingBehavior = findNearbyUnlitKindling();
             if (kindlingBehavior != null) {
+                if (kindling == 0) {
+                    torchLightFg.intensity = startingFgIntensity;
+                    torchLightBg.intensity = startingBgIntensity;
+                    material.color = startingColor;
+                }
                 kindling++;
                 kindlingText.text = kindling.ToString();
                 Destroy(kindlingBehavior.gameObject);
+
                 return;
             }
             
@@ -122,11 +140,26 @@ public class PlayerManager : MonoBehaviour {
     }
 
     private void updateFuel() {
-        if (fuelLeftSeconds > 0) {
+        if (fuelLeftSeconds > 0 && !isUnlit) {
             fuelLeftSeconds -= Time.deltaTime;
             fuelSlider.value = Mathf.Clamp(fuelLeftSeconds/maxFuelSeconds, 0, 1);
+
+            if (kindling == 0) {
+                float multiplier = Mathf.Max(minimumMultiplier, fuelLeftSeconds/maxFuelSeconds);
+                torchLightFg.intensity = startingFgIntensity * multiplier;
+                torchLightBg.intensity = startingBgIntensity * multiplier;
+                material.SetColor("_Color", new Color(startingColor.r * multiplier, startingColor.g * multiplier, startingColor.b * multiplier));
+            }
+
             if (fuelLeftSeconds <= 0) {
-                animator.SetTrigger("Unlit");
+                if (kindling == 0) {
+                    animator.SetTrigger("Unlit");
+                    isUnlit = true;
+                } else {
+                    kindling--;
+                    kindlingText.text = kindling.ToString();
+                    fuelLeftSeconds = maxFuelSeconds;
+                }
             }
         }        
     }
