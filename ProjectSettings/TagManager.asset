@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Chest
   - Kindling
+  - Bat
   layers:
   - Default
   - TransparentFX

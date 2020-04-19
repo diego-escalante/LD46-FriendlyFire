@@ -27,6 +27,7 @@ public class PlayerManager : MonoBehaviour {
     private Animator animator;
     private PlayerInputs playerInputs;
     private Color startingColor;
+    private bool isDead = false;
 
     public void Start() {
         kindlingText.text = kindling.ToString();
@@ -46,6 +47,13 @@ public class PlayerManager : MonoBehaviour {
         attack();
         action();
         controlAnimation();
+    }
+
+    public void die() {
+        if (!isDead) {
+            isDead = true;
+            Debug.Log("Dead!");
+        }
     }
 
     private void attack() {
@@ -83,6 +91,10 @@ public class PlayerManager : MonoBehaviour {
                                 isUnlit = false; 
                             }
                         }
+                        break;
+                    
+                    case "Bat":
+                        hit.GetComponent<BatBehavior>().getBurntYo();
                         break;
                 }
             }
