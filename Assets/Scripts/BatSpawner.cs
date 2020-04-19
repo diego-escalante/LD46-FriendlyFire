@@ -11,6 +11,8 @@ public class BatSpawner : MonoBehaviour {
     private float spawnMoment;
     private float countdown;
 
+    // private bool spawnSwarm = false;
+
 
     void Start(){
         spawnMoment = intervalBetweenSpawns * 2;
@@ -23,7 +25,6 @@ public class BatSpawner : MonoBehaviour {
         if (spawnMoment <= countdown) {
             Instantiate(batPrefab, calculateSpawnLocation(), Quaternion.identity);
             spawnMoment = Mathf.Infinity;
-            Debug.Log("Spawned!");
         }
 
         if (countdown <= 0) {
@@ -31,9 +32,22 @@ public class BatSpawner : MonoBehaviour {
             spawnMoment = Random.Range(0f, intervalBetweenSpawns);
             countdown = intervalBetweenSpawns;
         }
+
+    }
+
+     public void swarm() {
+        // spawnSwarm = true;
+        intervalBetweenSpawns = 0.1f;
+        countdown = intervalBetweenSpawns;
+        spawnMoment = 0;
+        decreasingStep = 0;
+        Destroy(this, 2f);
     }
 
     private Vector2 calculateSpawnLocation() {
-        return Camera.main.ViewportToWorldPoint(new Vector3(Random.Range(0f,1f),Mathf.Sign(Random.Range(-1, 1)) * 1.2f,0));
+        if (Random.Range(0,2) == 0) {
+            return Camera.main.ViewportToWorldPoint(new Vector3(Random.Range(0f,1f),Random.Range(0, 2) == 0 ? 1.05f : -0.05f,0));
+        }
+        return Camera.main.ViewportToWorldPoint(new Vector3(Random.Range(0, 2) == 0 ? 1.05f : -0.05f, Random.Range(0f,1f),0));
     }
 }

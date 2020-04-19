@@ -16,6 +16,7 @@ public class PlayerManager : MonoBehaviour {
     public Light2D torchLightBg;
     public Material material;
     public Light2D globalLight;
+    public Text endText;
     
     private bool isUnlit = false;
     private float startingFgIntensity, startingBgIntensity, startingGIntensity;
@@ -50,13 +51,45 @@ public class PlayerManager : MonoBehaviour {
         action();
         refuel();
         controlAnimation();
+
+        if (Input.GetButtonDown("Restart")) {
+            // Restart game.
+        }
+    }
+
+    private void win() {
+        Destroy(playerInputs);
+        GetComponent<SpriteRenderer>().color = Color.clear;
+        fuelLeftSeconds = 0.01f;
+        animator.SetTrigger("Unlit");
+        Invoke("afterWin", 2f);
+        GameObject[] bats = GameObject.FindGameObjectsWithTag("Bat");
+        foreach (GameObject bat in bats) {
+            Destroy(bat);
+        }
+        Destroy(GameObject.FindGameObjectWithTag("Ladder").GetComponent<BatSpawner>());
     }
 
     public void die() {
         if (!isDead) {
             isDead = true;
-            Debug.Log("Dead!");
+            Destroy(playerInputs);
+            transform.localRotation = Quaternion.Euler(0, 0, 90);
+            fuelLeftSeconds = 0.01f;
+            transform.GetChild(2).localRotation = Quaternion.Euler(0,0,-90);
+            animator.SetTrigger("Unlit");
+            GameObject.FindGameObjectWithTag("Ladder").GetComponent<BatSpawner>().swarm();
+            Invoke("afterDeath", 5f);
         }
+    }
+
+    private void afterWin() {
+        endText.text = "You escaped with " + gold.ToString() + "\ngold bars! Press 'R'";
+    }
+
+    private void afterDeath() {
+        GetComponent<SpriteRenderer>().color = Color.clear;
+        endText.text = "You have perished.\nPress 'R'";
     }
 
     private void refuel() {
@@ -121,10 +154,6 @@ public class PlayerManager : MonoBehaviour {
                 }
             }
         }
-    }
-
-    private void win() {
-        Debug.Log("win!");
     }
 
     private void action() {

@@ -7,6 +7,7 @@ public class PlayerInputs : MonoBehaviour {
     public bool attacking { get; private set; }
     public bool action { get; private set; }
     public bool refuel { get; private set; }
+    public bool restart { get; private set; }
 
     void OnDisable() {
         horizontal = 0;
@@ -14,6 +15,7 @@ public class PlayerInputs : MonoBehaviour {
         attacking = false;
         action = false;
         refuel = false;
+        restart = false;
     }
 
     void Update() {
@@ -22,5 +24,6 @@ public class PlayerInputs : MonoBehaviour {
         attacking = Input.GetButtonDown("Fire");
         action = Input.GetButtonDown("Action");
         refuel = Input.GetButtonDown("Refuel");
+        restart = Input.GetButtonDown("Restart");
     }
 }
