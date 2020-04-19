@@ -75,7 +75,14 @@ public class PlayerManager : MonoBehaviour {
             foreach (Collider2D hit in hits) {
                 switch (hit.gameObject.tag) {
                     case "Kindling":
-                        hit.GetComponent<KindlingBehavior>().Light();
+                        if (!isUnlit) {
+                            hit.GetComponent<KindlingBehavior>().Light();
+                        } else {
+                            if (hit.GetComponent<KindlingBehavior>().lit && fuelLeftSeconds > 0) {
+                                animator.SetTrigger("Lit");
+                                isUnlit = false; 
+                            }
+                        }
                         break;
                 }
             }
@@ -159,8 +166,16 @@ public class PlayerManager : MonoBehaviour {
                     kindling--;
                     kindlingText.text = kindling.ToString();
                     fuelLeftSeconds = maxFuelSeconds;
+                    fuelSlider.value = Mathf.Clamp(fuelLeftSeconds/maxFuelSeconds, 0, 1);
                 }
             }
+        }
+
+        if (isUnlit && kindling > 0 && fuelLeftSeconds <= 0) {
+            kindling--;
+            kindlingText.text = kindling.ToString();
+            fuelLeftSeconds = maxFuelSeconds;
+            fuelSlider.value = Mathf.Clamp(fuelLeftSeconds/maxFuelSeconds, 0, 1);
         }        
     }
 
