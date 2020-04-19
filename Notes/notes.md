@@ -55,28 +55,28 @@ Gameplay:
 So far, these are the key pieces:
 
 * ~~Dynamic Lighting. Never done it. This might suck.~~
-* Player.
+* ~~Player.~~
     * ~~Move. (ARROW KEYS)~~
     * ~~Swing. (Z)~~
     * ~~Open chests. (X)~~
-    * Pick/Drop kindling. (X)
-        * The X button is contextual. If near chest, open. If near kindling, pick up. Otherwise, drop kindling.
+    * ~~Pick/Drop kindling. (X)~~
+        * ~~The X button is contextual. If near chest, open. If near kindling, pick up. Otherwise, drop kindling.~~
 * Enemies.
     * Bat. Flies straight at you. Close contact with fire makes it flee.
-    * Giant Spider. Crawls slower. If it runs through fire it will flee. Only flees when burning.
-    * Ghost. Slow, hard to spot unless there is light. Requires swinging to make it go away.
-* Chest.
-    * Takes time to unlock.
-    * Gives kindling or treasure.
+    * (Stretch Goal) Giant Spider. Crawls slower. If it runs through fire it will flee. Only flees when burning.
+    * (Stretch Goal) Ghost. Slow, hard to spot unless there is light. Requires swinging to make it go away.
+* ~~Chest.~~
+    * ~~Takes time to unlock.~~
+    * ~~Gives kindling or treasure.~~
     * Possible variants: Better chests take longer to open but give more kindling or treasure.
-* Braziers/Moss/Roots
-    * Swing to light for some time.
+* ~~Braziers/Moss/Roots~~
+    * ~~Swing to light for some time.~~
 * (Stretch Goal) Turn manually created level into randomly-generated.
 * (Stretch Goal) Water Puddles
     * Extingishes fire faster.
 * (Stretch Goal) Fire spread?
 * Balancing.
-    * The longer the game last the rarer kindling is.
+    * The longer the game last the rarer kindling is, more bats?
 * Entrance/Exit
     * Reach it to end the game.
 
