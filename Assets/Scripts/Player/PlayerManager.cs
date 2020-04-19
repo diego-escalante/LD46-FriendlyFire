@@ -110,9 +110,19 @@ public class PlayerManager : MonoBehaviour {
         }
     }
 
+    private void win() {
+        Debug.Log("win!");
+    }
+
     private void action() {
         if (playerInputs.action) {
-            // If near closed chest, open it.
+            // If near ladder and have enough gold, win.
+            if (gold >= 100 && Vector2.Distance(GameObject.FindGameObjectWithTag("Ladder").transform.position, transform.position) <= searchRadius) {
+                win();
+                return;
+            }
+
+            // Otherwise if near closed chest, open it.
             ChestBehavior chestBehavior = findNearbyClosedChest();
             if (chestBehavior != null) {
                 chestBehavior.Open();
@@ -256,7 +266,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     public void addGold() {
-        gold += 5;
+        gold += 10;
         goldText.text = gold.ToString();
     }
 }
