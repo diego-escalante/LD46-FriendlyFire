@@ -4,16 +4,16 @@ using UnityEngine.UI;
 public class PlayerManager : MonoBehaviour {
 
     public Vector2 facingDirection = Vector2.up;
-    public GameObject FireSwooshPrefab;
     public float attackCooldown = 0.25f;
     public float searchRadius = 1f;
     public float maxFuelSeconds = 60f;
     public Slider fuelSlider;
     public Text kindlingText;
     public Text goldText;
+    public GameObject kindlingPrefab;
     
     private int gold = 0;
-    private int kindling = 0;
+    private int kindling = 5;
     private float fuelLeftSeconds;
     private float currentCooldownTime = 0;
     private TopDownMovement movementScript;
@@ -21,18 +21,16 @@ public class PlayerManager : MonoBehaviour {
     private PlayerInputs playerInputs;
 
     public void Start() {
+        kindlingText.text = kindling.ToString();
+        goldText.text = gold.ToString();
         fuelLeftSeconds = maxFuelSeconds;
         animator = GetComponent<Animator>();
         movementScript = GetComponent<TopDownMovement>();
         playerInputs = GetComponent<PlayerInputs>();
-        if (FireSwooshPrefab == null) {
-            Debug.LogError("FireSwooshPrefab has not been picked in the PlayerManager!");
-        }
     }
 
     public void Update() {
         updateFuel();
-        updateFacingDirection();
         attack();
         action();
         controlAnimation();
@@ -43,25 +41,20 @@ public class PlayerManager : MonoBehaviour {
         if (currentCooldownTime > 0) {
             currentCooldownTime -= Time.deltaTime;
         } else if (playerInputs.attacking) {
-            Instantiate(FireSwooshPrefab, transform.position + (1.5f * transform.right), facingDirectionToQuaternion(facingDirection));
             // movementScript.enabled = false;
             currentCooldownTime = attackCooldown;
             animator.SetTrigger("Attack");
 
             // Choose attack point.
-            Vector2 attackPoint = transform.position;
+            Vector2 attackPoint = getPositionInFrontOfPlayer();
             Vector2 boxSize;
             if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Up")) {
-                attackPoint += Vector2.up * 0.75f;
                 boxSize = new Vector2(1.25f, 0.5f);
             } else if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Right")) {
-                attackPoint += Vector2.right * 0.75f;
                 boxSize = new Vector2(0.5f, 1.25f);
             } else if  (animator.GetCurrentAnimatorStateInfo(0).IsTag("Down")) {
-                attackPoint += Vector2.down * 0.75f;
                 boxSize = new Vector2(1.25f, 0.5f);
             } else {
-                attackPoint += Vector2.left * 0.75f;
                 boxSize = new Vector2(0.5f, 1.25f);
             }
 
@@ -87,9 +80,45 @@ public class PlayerManager : MonoBehaviour {
             }
 
             // Otherwise, if near kindling, pick it up.
+            KindlingBehavior kindlingBehavior = findNearbyUnlitKindling();
+            if (kindlingBehavior != null) {
+                kindling++;
+                kindlingText.text = kindling.ToString();
+                Destroy(kindlingBehavior.gameObject);
+                return;
+            }
             
             // Otherwise, if have kindling, drop it.
+            if (kindling > 0) {
+                dropKindling();
+            }
         }
+    }
+
+    private void dropKindling() {
+        Vector2 dropPoint = getPositionInFrontOfPlayer() + new Vector2(0,-0.5f * 0.75f); // Kindling is offsetted. gross.
+        Collider2D[] colls = Physics2D.OverlapBoxAll(dropPoint, Vector2.one, 0);
+        // TODO: Would be nice to provide feedback when unable to place, like a sound.
+        if (colls == null || colls.Length == 0) {
+            Instantiate(kindlingPrefab, dropPoint, Quaternion.identity);
+            kindling--;
+            kindlingText.text = kindling.ToString();
+        }
+    }
+
+    private Vector2 getPositionInFrontOfPlayer() {
+        Vector2 pos = transform.position;
+        float distanceAhead = 0.75f;
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Up")) {
+            pos += Vector2.up * distanceAhead + new Vector2(0, 0.2f); //This is a hack, let me go, please.
+        } else if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Right")) {
+            pos += Vector2.right * distanceAhead;
+        } else if  (animator.GetCurrentAnimatorStateInfo(0).IsTag("Down")) {
+            pos += Vector2.down * distanceAhead;
+        } else {
+            pos += Vector2.left * distanceAhead;
+        }
+        return pos;
     }
 
     private void updateFuel() {
@@ -127,34 +156,28 @@ public class PlayerManager : MonoBehaviour {
         return null;
     }
 
-    private void updateFacingDirection() {
-        Vector2 velocity = movementScript.getVelocity();
+    private KindlingBehavior findNearbyUnlitKindling() {
+        // Find all nearby kindling.
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, searchRadius);
+        if (colliders == null || colliders.Length == 0) {
+            return null;
+        }
 
-        // Only update direction when moving.
-        if (velocity != Vector2.zero) {
-            if (velocity.y != 0) {
-                // Prioritize up/down over left/right.
-                facingDirection = Vector2.up * Mathf.Sign(velocity.y);
-            } else {
-                facingDirection = Vector2.right * Mathf.Sign(velocity.x);
+        // If a kindling is unlit, return that one.
+        KindlingBehavior kindlingBehavior;
+        foreach (Collider2D coll in colliders) {
+            
+            if (coll.gameObject.tag != "Kindling") {
+                // This collider is not a Kindling, skip.
+                continue;
+            }
+
+            kindlingBehavior = coll.GetComponent<KindlingBehavior>();
+            if (!kindlingBehavior.lit) {
+                return kindlingBehavior;
             }
         }
-    }
-
-    // For instantiating fire swooshes based on the direction the player is facing.
-    private Quaternion facingDirectionToQuaternion(Vector2 direction) {
-        if (direction == Vector2.right) {
-            return Quaternion.Euler(0, 0, 0);
-        } else if (direction == Vector2.up) {
-            return Quaternion.Euler(0, 0, 90);
-        } else if (direction == Vector2.left) {
-            return Quaternion.Euler(0, 0, 180);
-        } else if (direction == Vector2.down) {
-            return Quaternion.Euler(0, 0, 270);
-        } else {
-            Debug.LogError("Facing Direction is NOT up down left or right, and cannot accurately convert to quaternion.");
-            return Quaternion.Euler(0, 0, 0);
-        }
+        return null;
     }
 
     private void controlAnimation() {
