@@ -6,10 +6,23 @@ public class LevelGenerator : MonoBehaviour {
 
     public GameObject kindlingPrefab;
     public GameObject chestPrefab;
+    public GameObject boulderPrefab;
     public int totalKindling = 100;
     public int totalChests = 100;
+    public int totalBoulders = 50;
 
     void Start() {
+
+        // Boulder.
+        for (int i = 0; i < totalBoulders; i++) {
+            Vector2 randomPosition = new Vector2 (Random.Range(0,90) - Random.Range(0, 90), Random.Range(0,90) - Random.Range(0, 90));
+            if (!isPositionFreeOfNeighbors(randomPosition)) {
+                i--;
+                continue;
+            }
+            Instantiate(boulderPrefab, randomPosition, Quaternion.identity);
+        }
+
         // Chests.
         for (int i = 0; i < totalChests; i++) {
             Vector2 randomPosition = new Vector2 (Random.Range(0,90) - Random.Range(0, 90), Random.Range(0,90) - Random.Range(0, 90));
