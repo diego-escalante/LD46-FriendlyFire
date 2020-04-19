@@ -67,16 +67,25 @@ public class PlayerManager : MonoBehaviour {
 
             // Choose attack point.
             Vector2 attackPoint = getPositionInFrontOfPlayer();
-            Vector2 boxSize;
+            Vector2 boxSize;// = new Vector2(1.25f, 1.25f);
             if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Up")) {
-                boxSize = new Vector2(1.25f, 0.5f);
+                attackPoint.y += 0.25f;
+                boxSize = new Vector2(3f, 1.25f);
             } else if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Right")) {
-                boxSize = new Vector2(0.5f, 1.25f);
+                attackPoint.x += 0.15f;
+                boxSize = new Vector2(1.25f, 3f);
             } else if  (animator.GetCurrentAnimatorStateInfo(0).IsTag("Down")) {
-                boxSize = new Vector2(1.25f, 0.5f);
-            } else {
-                boxSize = new Vector2(0.5f, 1.25f);
+                attackPoint.y -= 0.75f;
+                boxSize = new Vector2(3f, 1.25f);
+            } else /* Left */ {
+                attackPoint.x -= 0.15f;
+                boxSize = new Vector2(1.25f, 3f);
             }
+
+            Debug.DrawLine(attackPoint + new Vector2(boxSize.x/2, boxSize.y/2), attackPoint + new Vector2(-boxSize.x/2, boxSize.y/2), Color.green, 2f);
+            Debug.DrawLine(attackPoint + new Vector2(-boxSize.x/2, boxSize.y/2), attackPoint + new Vector2(-boxSize.x/2, -boxSize.y/2), Color.green, 2f);
+            Debug.DrawLine(attackPoint + new Vector2(-boxSize.x/2, -boxSize.y/2), attackPoint + new Vector2(boxSize.x/2, -boxSize.y/2), Color.green, 2f);
+            Debug.DrawLine(attackPoint + new Vector2(boxSize.x/2, -boxSize.y/2), attackPoint + new Vector2(boxSize.x/2, boxSize.y/2), Color.green, 2f);
 
             Collider2D[] hits = Physics2D.OverlapBoxAll(attackPoint, boxSize, 0f);
             //Boy some object oriented programming would have been nice here.

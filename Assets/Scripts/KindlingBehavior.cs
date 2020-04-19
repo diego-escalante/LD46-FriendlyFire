@@ -8,6 +8,7 @@ public class KindlingBehavior : MonoBehaviour {
     public float burningDurationInSeconds = 60f;
     public Light2D fgLight;
     public Light2D bgLight;
+    public Collider2D batCollider;
 
     private float startingFgLightIntensity;
     private float startingBgLightIntensity;
@@ -16,6 +17,7 @@ public class KindlingBehavior : MonoBehaviour {
     private Vector3 startingScale;
 
     private float minimumMultiplier = 0.1f;
+    // private Collider2D[] colls = new Collider2D[10];
 
     void Start() {
         animator = GetComponent<Animator>();
@@ -39,6 +41,8 @@ public class KindlingBehavior : MonoBehaviour {
             if (multiplier <= minimumMultiplier * 2 && gameObject.layer != 0) {
                 gameObject.layer = 0;
             }
+
+            checkForBats();
         }
     }
 
@@ -46,6 +50,16 @@ public class KindlingBehavior : MonoBehaviour {
         if (!lit) {
             animator.SetTrigger("Light");
             lit = true;
+        }
+    }
+
+    public void checkForBats() {
+        Collider2D[] colls = Physics2D.OverlapBoxAll(batCollider.bounds.center, batCollider.bounds.size, 0f);
+
+        foreach (Collider2D coll in colls) {
+            if (coll.gameObject.tag == "Bat") {
+                coll.GetComponent<BatBehavior>().getBurntYo(); //What a dumb function name, what was 4am-Me thinking?
+            }
         }
     }
 }
