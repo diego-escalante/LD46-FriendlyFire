@@ -15,9 +15,10 @@ public class PlayerManager : MonoBehaviour {
     public Light2D torchLightFg;
     public Light2D torchLightBg;
     public Material material;
+    public Light2D globalLight;
     
     private bool isUnlit = false;
-    private float startingFgIntensity, startingBgIntensity;
+    private float startingFgIntensity, startingBgIntensity, startingGIntensity;
     private float minimumMultiplier = 0.1f;
     private int gold = 0;
     private int kindling = 5;
@@ -38,6 +39,7 @@ public class PlayerManager : MonoBehaviour {
         playerInputs = GetComponent<PlayerInputs>();
         startingBgIntensity = torchLightBg.intensity;
         startingFgIntensity = torchLightFg.intensity;
+        startingGIntensity = globalLight.intensity;
         startingColor = new Color(4f, 2f, 0f, 1f);
         material.SetColor("_Color", startingColor);
     }
@@ -97,6 +99,7 @@ public class PlayerManager : MonoBehaviour {
                         } else {
                             if (hit.GetComponent<KindlingBehavior>().lit && fuelLeftSeconds > 0) {
                                 animator.SetTrigger("Lit");
+                                globalLight.intensity = startingGIntensity;
                                 isUnlit = false; 
                             }
                         }
@@ -135,6 +138,7 @@ public class PlayerManager : MonoBehaviour {
                 if (kindling == 0) {
                     torchLightFg.intensity = startingFgIntensity;
                     torchLightBg.intensity = startingBgIntensity;
+                    globalLight.intensity = startingGIntensity;
                     material.color = startingColor;
                 }
                 kindling++;
@@ -186,12 +190,14 @@ public class PlayerManager : MonoBehaviour {
                 float multiplier = Mathf.Max(minimumMultiplier, fuelLeftSeconds/maxFuelSeconds);
                 torchLightFg.intensity = startingFgIntensity * multiplier;
                 torchLightBg.intensity = startingBgIntensity * multiplier;
+                globalLight.intensity = startingGIntensity * multiplier;
                 material.SetColor("_Color", new Color(startingColor.r * multiplier, startingColor.g * multiplier, startingColor.b * multiplier));
             }
 
             if (fuelLeftSeconds <= 0) {
                 if (kindling == 0) {
                     animator.SetTrigger("Unlit");
+                    globalLight.intensity = 0;
                     isUnlit = true;
                 } else {
                     kindling--;

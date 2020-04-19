@@ -2577,7 +2577,7 @@ MonoBehaviour:
     type: 3}
   boulderPrefab: {fileID: 8214553104222719918, guid: 0b2422c55514f604db1373ae5369057a,
     type: 3}
-  totalKindling: 100
+  totalKindling: 50
   totalChests: 100
   totalBoulders: 150
 --- !u!4 &299231797
@@ -4244,7 +4244,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.025
+  m_Intensity: 0.05
   m_LightVolumeOpacity: 0
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
@@ -4663,6 +4663,7 @@ MonoBehaviour:
   torchLightFg: {fileID: 1250004967}
   torchLightBg: {fileID: 1121221827}
   material: {fileID: 2100000, guid: f0b21f72e42f72f46ada962aaea03bf4, type: 2}
+  globalLight: {fileID: 522766034}
 --- !u!95 &543661000
 Animator:
   serializedVersion: 3
@@ -6810,7 +6811,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0.5
-  m_PointLightOuterRadius: 2
+  m_PointLightOuterRadius: 3
   m_PointLightDistance: 3
   m_PointLightQuality: 1
   m_ShapeLightParametricSides: 48
@@ -7638,7 +7639,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0.5
-  m_PointLightOuterRadius: 2
+  m_PointLightOuterRadius: 3
   m_PointLightDistance: 3
   m_PointLightQuality: 1
   m_ShapeLightParametricSides: 48

@@ -14,6 +14,7 @@ public class ChestBehavior : MonoBehaviour {
     private PlayerManager playerManager;
 
     void Start() {
+        timeToOpen = Random.Range(timeToOpen/2f, timeToOpen);
         currentTime = timeToOpen;
         animator = GetComponent<Animator>();
         GameObject player = GameObject.FindGameObjectWithTag("Player");
