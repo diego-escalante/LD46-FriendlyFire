@@ -66,7 +66,6 @@ public class PlayerManager : MonoBehaviour {
             }
 
             Collider2D[] hits = Physics2D.OverlapBoxAll(attackPoint, boxSize, 0f);
-            Debug.Log(hits.Length);
             //Boy some object oriented programming would have been nice here.
             foreach (Collider2D hit in hits) {
                 switch (hit.gameObject.tag) {
