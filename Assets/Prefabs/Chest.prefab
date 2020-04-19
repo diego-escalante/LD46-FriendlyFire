@@ -507,6 +507,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 230e1392863880d458cd91621282225f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unlockBar: {fileID: 2035253655}
+  kkslider: {fileID: 1246158413}
+  timeToOpen: 10
 --- !u!95 &7792643083943377184
 Animator:
   serializedVersion: 3

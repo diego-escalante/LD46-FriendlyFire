@@ -18,7 +18,7 @@ public class BatBehavior : MonoBehaviour {
     }
 
     void Update() {
-        float step = speed * Time.deltaTime;
+        float step = (isFleeing ? speed * 1.5f : speed) * Time.deltaTime;
         transform.position = Vector2.MoveTowards(transform.position, player.transform.position, isFleeing ? -step : step);
 
         if (!isFleeing && Vector2.Distance(transform.position, player.transform.position) <= 0.33f) {
