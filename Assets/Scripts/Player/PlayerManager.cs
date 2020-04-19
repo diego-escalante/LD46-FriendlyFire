@@ -197,7 +197,7 @@ public class PlayerManager : MonoBehaviour {
             }
 
             chestBehavior = coll.GetComponent<ChestBehavior>();
-            if (chestBehavior.closed) {
+            if (chestBehavior != null && chestBehavior.closed) {
                 return chestBehavior;
             }
         }
@@ -232,5 +232,10 @@ public class PlayerManager : MonoBehaviour {
         Vector2 velocity = movementScript.getVelocity();
         animator.SetInteger("Horizontal", velocity.x == 0 ? 0 : (int)Mathf.Sign(velocity.x));
         animator.SetInteger("Vertical", velocity.y == 0 ? 0 : (int)Mathf.Sign(velocity.y));
+    }
+
+    public void addGold() {
+        gold += 5;
+        goldText.text = gold.ToString();
     }
 }
