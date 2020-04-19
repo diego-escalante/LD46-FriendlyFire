@@ -3,7 +3,7 @@ using UnityEngine.Experimental.Rendering.Universal;
 
 public class KindlingBehavior : MonoBehaviour {
 
-    public bool lit {get; private set;} = false;
+    public bool lit = false;
     
     public float burningDurationInSeconds = 60f;
     public Light2D fgLight;
@@ -25,6 +25,9 @@ public class KindlingBehavior : MonoBehaviour {
         startingScale = transform.localScale;
         startingBgLightIntensity = bgLight.intensity;
         startingFgLightIntensity = fgLight.intensity;
+        if (lit) {
+            animator.SetTrigger("Light");
+        }
     }
 
     void Update() {

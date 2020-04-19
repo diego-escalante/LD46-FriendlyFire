@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Experimental.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : MonoBehaviour {
 
@@ -53,7 +54,7 @@ public class PlayerManager : MonoBehaviour {
         controlAnimation();
 
         if (Input.GetButtonDown("Restart")) {
-            // Restart game.
+            SceneManager.LoadScene(0);
         }
     }
 

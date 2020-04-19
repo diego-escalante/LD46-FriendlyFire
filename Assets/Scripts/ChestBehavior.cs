@@ -18,6 +18,10 @@ public class ChestBehavior : MonoBehaviour {
         currentTime = timeToOpen;
         animator = GetComponent<Animator>();
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null) {
+            Debug.Log("No player found.");
+            return;
+        }
         playerInputs = player.GetComponent<PlayerInputs>();
         playerManager = player.GetComponent<PlayerManager>();
     }
