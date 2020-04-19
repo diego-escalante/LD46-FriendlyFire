@@ -902,7 +902,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.5}
+  m_Size: {x: 0.3, y: 0.48564053}
   m_EdgeRadius: 0
 --- !u!114 &543660999
 MonoBehaviour:
@@ -917,14 +917,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   facingDirection: {x: 0, y: 1}
-  FireSwooshPrefab: {fileID: 2067860662407695590, guid: 515054b3df687924b97f166a0b2ea99d,
-    type: 3}
   attackCooldown: 0.35
-  searchRadius: 0.5
+  searchRadius: 0.75
   maxFuelSeconds: 60
   fuelSlider: {fileID: 605541136}
   kindlingText: {fileID: 157969110}
   goldText: {fileID: 333886588}
+  kindlingPrefab: {fileID: 7886839906692509794, guid: d1a9bbf6fcfc1a641941eff3673204d9,
+    type: 3}
 --- !u!95 &543661000
 Animator:
   serializedVersion: 3
@@ -2004,12 +2004,12 @@ PrefabInstance:
     - target: {fileID: 7886839906692509796, guid: d1a9bbf6fcfc1a641941eff3673204d9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.5
+      value: -0.61
       objectReference: {fileID: 0}
     - target: {fileID: 7886839906692509796, guid: d1a9bbf6fcfc1a641941eff3673204d9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.54
+      value: 1.9
       objectReference: {fileID: 0}
     - target: {fileID: 7886839906692509796, guid: d1a9bbf6fcfc1a641941eff3673204d9,
         type: 3}
