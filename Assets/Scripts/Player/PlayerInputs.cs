@@ -6,12 +6,14 @@ public class PlayerInputs : MonoBehaviour {
     public float vertical { get; private set; }
     public bool attacking { get; private set; }
     public bool action { get; private set; }
+    public bool refuel { get; private set; }
 
     void OnDisable() {
         horizontal = 0;
         vertical = 0;
         attacking = false;
         action = false;
+        refuel = false;
     }
 
     void Update() {
@@ -19,5 +21,6 @@ public class PlayerInputs : MonoBehaviour {
         vertical = Input.GetAxisRaw("Vertical");
         attacking = Input.GetButtonDown("Fire");
         action = Input.GetButtonDown("Action");
+        refuel = Input.GetButtonDown("Refuel");
     }
 }

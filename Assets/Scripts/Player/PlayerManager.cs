@@ -48,6 +48,7 @@ public class PlayerManager : MonoBehaviour {
         updateFuel();
         attack();
         action();
+        refuel();
         controlAnimation();
     }
 
@@ -55,6 +56,15 @@ public class PlayerManager : MonoBehaviour {
         if (!isDead) {
             isDead = true;
             Debug.Log("Dead!");
+        }
+    }
+
+    private void refuel() {
+        if (playerInputs.refuel && kindling > 0) {
+            kindling--;
+            kindlingText.text = kindling.ToString();
+            fuelLeftSeconds = maxFuelSeconds;
+            fuelSlider.value = Mathf.Clamp(fuelLeftSeconds/maxFuelSeconds, 0, 1);
         }
     }
 
@@ -135,12 +145,12 @@ public class PlayerManager : MonoBehaviour {
             // Otherwise, if near kindling, pick it up.
             KindlingBehavior kindlingBehavior = findNearbyUnlitKindling();
             if (kindlingBehavior != null) {
-                if (kindling == 0) {
-                    torchLightFg.intensity = startingFgIntensity;
-                    torchLightBg.intensity = startingBgIntensity;
-                    globalLight.intensity = startingGIntensity;
-                    material.color = startingColor;
-                }
+                // if (kindling == 0) {
+                //     torchLightFg.intensity = startingFgIntensity;
+                //     torchLightBg.intensity = startingBgIntensity;
+                //     globalLight.intensity = startingGIntensity;
+                //     material.color = startingColor;
+                // }
                 kindling++;
                 kindlingText.text = kindling.ToString();
                 Destroy(kindlingBehavior.gameObject);
@@ -186,13 +196,11 @@ public class PlayerManager : MonoBehaviour {
             fuelLeftSeconds -= Time.deltaTime;
             fuelSlider.value = Mathf.Clamp(fuelLeftSeconds/maxFuelSeconds, 0, 1);
 
-            if (kindling == 0) {
-                float multiplier = Mathf.Max(minimumMultiplier, fuelLeftSeconds/maxFuelSeconds);
-                torchLightFg.intensity = startingFgIntensity * multiplier;
-                torchLightBg.intensity = startingBgIntensity * multiplier;
-                globalLight.intensity = startingGIntensity * multiplier;
-                material.SetColor("_Color", new Color(startingColor.r * multiplier, startingColor.g * multiplier, startingColor.b * multiplier));
-            }
+            float multiplier = Mathf.Max(minimumMultiplier, fuelLeftSeconds/maxFuelSeconds);
+            torchLightFg.intensity = startingFgIntensity * multiplier;
+            torchLightBg.intensity = startingBgIntensity * multiplier;
+            globalLight.intensity = startingGIntensity * multiplier;
+            material.SetColor("_Color", new Color(startingColor.r * multiplier, startingColor.g * multiplier, startingColor.b * multiplier));
 
             if (fuelLeftSeconds <= 0) {
                 if (kindling == 0) {
@@ -200,20 +208,20 @@ public class PlayerManager : MonoBehaviour {
                     globalLight.intensity = 0;
                     isUnlit = true;
                 } else {
-                    kindling--;
-                    kindlingText.text = kindling.ToString();
-                    fuelLeftSeconds = maxFuelSeconds;
-                    fuelSlider.value = Mathf.Clamp(fuelLeftSeconds/maxFuelSeconds, 0, 1);
+                    // kindling--;
+                    // kindlingText.text = kindling.ToString();
+                    // fuelLeftSeconds = maxFuelSeconds;
+                    // fuelSlider.value = Mathf.Clamp(fuelLeftSeconds/maxFuelSeconds, 0, 1);
                 }
             }
         }
 
-        if (isUnlit && kindling > 0 && fuelLeftSeconds <= 0) {
-            kindling--;
-            kindlingText.text = kindling.ToString();
-            fuelLeftSeconds = maxFuelSeconds;
-            fuelSlider.value = Mathf.Clamp(fuelLeftSeconds/maxFuelSeconds, 0, 1);
-        }        
+        // if (isUnlit && kindling > 0 && fuelLeftSeconds <= 0) {
+        //     kindling--;
+        //     kindlingText.text = kindling.ToString();
+        //     fuelLeftSeconds = maxFuelSeconds;
+        //     fuelSlider.value = Mathf.Clamp(fuelLeftSeconds/maxFuelSeconds, 0, 1);
+        // }        
     }
 
     private ChestBehavior findNearbyClosedChest() {
