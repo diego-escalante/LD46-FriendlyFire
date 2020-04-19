@@ -47,6 +47,34 @@ public class PlayerManager : MonoBehaviour {
             // movementScript.enabled = false;
             currentCooldownTime = attackCooldown;
             animator.SetTrigger("Attack");
+
+            // Choose attack point.
+            Vector2 attackPoint = transform.position;
+            Vector2 boxSize;
+            if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Up")) {
+                attackPoint += Vector2.up * 0.75f;
+                boxSize = new Vector2(1.25f, 0.5f);
+            } else if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Right")) {
+                attackPoint += Vector2.right * 0.75f;
+                boxSize = new Vector2(0.5f, 1.25f);
+            } else if  (animator.GetCurrentAnimatorStateInfo(0).IsTag("Down")) {
+                attackPoint += Vector2.down * 0.75f;
+                boxSize = new Vector2(1.25f, 0.5f);
+            } else {
+                attackPoint += Vector2.left * 0.75f;
+                boxSize = new Vector2(0.5f, 1.25f);
+            }
+
+            Collider2D[] hits = Physics2D.OverlapBoxAll(attackPoint, boxSize, 0f);
+            Debug.Log(hits.Length);
+            //Boy some object oriented programming would have been nice here.
+            foreach (Collider2D hit in hits) {
+                switch (hit.gameObject.tag) {
+                    case "Kindling":
+                        hit.GetComponent<KindlingBehavior>().Light();
+                        break;
+                }
+            }
         }
     }
 
