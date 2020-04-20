@@ -8,6 +8,7 @@ TagManager:
   - Kindling
   - Bat
   - Ladder
+  - MusicController
   layers:
   - Default
   - TransparentFX

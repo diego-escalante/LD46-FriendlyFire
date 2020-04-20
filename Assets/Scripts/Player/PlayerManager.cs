@@ -32,6 +32,7 @@ public class PlayerManager : MonoBehaviour {
     private Color startingColor;
     private bool isDead = false;
     private SoundController soundController;
+    private MusicController musicController;
 
     public void Start() {
         kindlingText.text = kindling.ToString();
@@ -46,6 +47,7 @@ public class PlayerManager : MonoBehaviour {
         startingColor = new Color(4f, 2f, 0f, 1f);
         material.SetColor("_Color", startingColor);
         soundController = GameObject.FindGameObjectWithTag("Ladder").GetComponent<SoundController>();
+        musicController = GameObject.FindGameObjectWithTag("MusicController").GetComponent<MusicController>();
     }
 
     public void Update() {
@@ -65,6 +67,7 @@ public class PlayerManager : MonoBehaviour {
         GetComponent<SpriteRenderer>().color = Color.clear;
         fuelLeftSeconds = 0.01f;
         animator.SetTrigger("Unlit");
+        musicController.musicPlayerDeath();
         Invoke("afterWin", 2f);
         GameObject[] bats = GameObject.FindGameObjectsWithTag("Bat");
         foreach (GameObject bat in bats) {
@@ -76,6 +79,7 @@ public class PlayerManager : MonoBehaviour {
     public void die() {
         if (!isDead) {
             soundController.playHitSound();
+            musicController.musicPlayerDeath();
             isDead = true;
             Destroy(playerInputs);
             transform.localRotation = Quaternion.Euler(0, 0, 90);
@@ -155,6 +159,7 @@ public class PlayerManager : MonoBehaviour {
                             if (hit.GetComponent<KindlingBehavior>().lit && fuelLeftSeconds > 0) {
                                 soundController.playlightSound();
                                 animator.SetTrigger("Lit");
+                                musicController.musicStartGame();
                                 globalLight.intensity = startingGIntensity;
                                 isUnlit = false; 
                             }
@@ -252,10 +257,11 @@ public class PlayerManager : MonoBehaviour {
             material.SetColor("_Color", new Color(startingColor.r * multiplier, startingColor.g * multiplier, startingColor.b * multiplier));
 
             if (fuelLeftSeconds <= 0) {
-                if (kindling == 0) {
+                if (kindling == 0 && !isDead) {
                     animator.SetTrigger("Unlit");
                     globalLight.intensity = 0;
                     isUnlit = true;
+                    musicController.musicUnlit();
                 } else {
                     // kindling--;
                     // kindlingText.text = kindling.ToString();
@@ -331,5 +337,6 @@ public class PlayerManager : MonoBehaviour {
     public void addGold() {
         gold += 10;
         goldText.text = gold.ToString();
+        musicController.musicSetDrone(gold/100f);
     }
 }
