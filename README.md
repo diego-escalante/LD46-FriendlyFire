@@ -1,4 +1,5 @@
-# LD46: Keep It Alive
+# Friendly Fire
+## LD46: Keep It Alive
 
 ### [Play LD46 here!](http://diego-escalante.github.io/LD46/)
 
