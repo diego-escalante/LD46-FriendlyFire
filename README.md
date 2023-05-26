@@ -8,7 +8,7 @@
 </p>
 
 ## [Play the game here!](https://diego-escalante.itch.io/friendly-fire)
-This game was made in 48 hours for the Ludum Dare 46 jam. The theme of the jam was "Keep it Alive." It was made with Unity. 
+This game was made in 48 hours for the Ludum Dare 46 jam in April 2020. The theme of the jam was "Keep it Alive." It was made with Unity. 
 
 ## Links
 * [Friendly Fire on itch.io](https://diego-escalante.itch.io/friendly-fire): Play the game directly on your browser here.
